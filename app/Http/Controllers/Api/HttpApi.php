@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\ApiError;
 use Symfony\Component\HttpFoundation\Request;
 /**
  * api处理器抽象类
