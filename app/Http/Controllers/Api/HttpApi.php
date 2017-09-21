@@ -54,16 +54,16 @@ class HttpApi {
     }
 
     /**
-     * 用户验证
+     * 调用application_control接口
      *
      * @access public
      * @param array $data
      * @return void
      */
-    public function check() {
+    public function application() {
         if(empty($this->data)){
             $endTime = $this->getCurrentTime();
-            $spend_time = round(($endTime - $this->startTime),4);
+            $spend_time = round(($endTime - $this->startTime),13);
             return $this->response($spend_time, 400, 'application_control_id有误', []);
         }
         $options = [
@@ -74,13 +74,56 @@ class HttpApi {
         $result = Curl::getMethod($options);
         if ($result[ 'code' ] != 200 || empty($result)) {
             $endTime = $this->getCurrentTime();
-            $spend_time = round(($endTime - $this->startTime),14);
+            $spend_time = round(($endTime - $this->startTime),13);
             return $this->response($spend_time, 400, 'application_control_id有误', []);
         }else{
             return $result;
         }
     }
-
+    /**
+     * 调用application_shenhe接口
+     *
+     * @access public
+     * @param array $data
+     * @return void
+     */
+    public function check() {
+        $options = [
+            'host' => 'http://test.api.base-y.caixinunion.com',
+            'path' => '/applicationcontrol/detail/',
+            'query' => ['application_control_id' => $this->data[ 'application_control_id' ]]
+        ];
+        $result = Curl::getMethod($options);
+        if ($result[ 'code' ] != 200 || empty($result)) {
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, 'application_control_id有误', []);
+        }else{
+            return $result;
+        }
+    }
+    /**
+     * 调用application_shenhe_opera详情接口
+     *
+     * @access public
+     * @param array $data
+     * @return void
+     */
+    public function checkOpera() {
+        $options = [
+            'host' => 'http://test.api.base-y.caixinunion.com',
+            'path' => '',
+            'query' => ['application_control_id' => $this->data[ 'application_control_id' ]]
+        ];
+        $result = Curl::getMethod($options);
+        if ($result[ 'code' ] != 200 || empty($result)) {
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, 'application_control_id有误', []);
+        }else{
+            return $result;
+        }
+    }
     /**
      * 程序运行时间
      *

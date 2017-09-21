@@ -16,10 +16,12 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'check', 'namespace' => 'Api'], function () {
-    Route::get('/get', 'Api@getInfo');
-//    Route::get('/', ['as' => 'aftermarket', 'uses' => 'AfterMarketController@index']);
-//    Route::get('/feedback', ['as' => 'aftermarket_feedback', 'uses' => 'AfterMarketController@getFeedback']);
-//    Route::delete('/feedback/{id}', 'AfterMarketController@delete');
-//    Route::post('/feedback/batch', 'AfterMarketController@batchDelete');
-//    Route::get('/feedback/search', 'AfterMarketController@search');
+    Route::get('/get', 'Api@get');
+    Route::get('/update', 'Api@update');
+    Route::get('/submit', 'Api@submit');
+    Route::get('/reject', 'Api@reject');
+    Route::get('/approve', 'Api@approve');
+    Route::get('/pass', 'Api@pass');
+    Route::get('/refuse', 'Api@refuse');
+    Route::get('/review', 'Api@review');
 });
