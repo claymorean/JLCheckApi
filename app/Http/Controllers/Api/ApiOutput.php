@@ -10,5 +10,12 @@ namespace App\Http\Controllers\Api;
 
 
 class ApiOutput {
-//输出格式化
+    public function success($options) {
+
+
+    }
+
+    public function error() {
+
+    }
 }
