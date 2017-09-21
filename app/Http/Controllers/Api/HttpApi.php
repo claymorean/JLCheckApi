@@ -67,7 +67,7 @@ class HttpApi {
             return $this->response($spend_time, 400, 'application_control_id有误', []);
         }
         $options = [
-            'host' => 'http://api.base-y.caixinunion.com',
+            'host' => 'http://test.api.base-y.caixinunion.com',
             'path' => '/applicationcontrol/detail/',
             'query' => ['application_control_id' => $this->data[ 'application_control_id' ]]
         ];
@@ -100,14 +100,15 @@ class HttpApi {
      * @return mixed
      */
     public function response($spend_time, $code, $msg, $options) {
-        $options = $code == 200 ? json_encode($options) : $options;
+//        $options = $code == 200 ? json_encode($options) : $options;
+        $options = array_map('urlencode',$options);
         $result = [
             'execute_time' => $spend_time,
             'domain' => $_SERVER[ 'SERVER_NAME' ],
             'code' => $code,
             'timestamp' => microtime(TRUE),
             'msg' => urlencode($msg),
-            'data' => array_map('urlencode',$options)
+            'data' => $options
         ];
         return urldecode(json_encode($result));
 //        $result = HttpApiUtil::makeReturn(0, '', $this->data['serial'], $this->result);
