@@ -125,6 +125,28 @@ class HttpApi {
         }
     }
     /**
+     * 调用application_shenpi_opera详情接口
+     *
+     * @access public
+     * @param array $data
+     * @return void
+     */
+    public function approveOpera() {
+        $options = [
+            'host' => 'http://test.api.base-y.caixinunion.com',
+            'path' => '',
+            'query' => ['application_control_id' => $this->data[ 'application_control_id' ]]
+        ];
+        $result = Curl::getMethod($options);
+        if ($result[ 'code' ] != 200 || empty($result)) {
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, 'application_control_id有误', []);
+        }else{
+            return $result;
+        }
+    }
+    /**
      * 程序运行时间
      *
      * @access public

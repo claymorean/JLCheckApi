@@ -11,17 +11,17 @@
 |
 */
 
-Route::get('/', function () {
+Route::any('/', function () {
     return view('welcome');
 });
 
 Route::group(['prefix' => 'check', 'namespace' => 'Api'], function () {
-    Route::get('/get', 'Api@get');
-    Route::get('/update', 'Api@update');
-    Route::get('/submit', 'Api@submit');
-    Route::get('/reject', 'Api@reject');
-    Route::get('/approve', 'Api@approve');
-    Route::get('/pass', 'Api@pass');
-    Route::get('/refuse', 'Api@refuse');
-    Route::get('/review', 'Api@review');
+    Route::any('/get', 'Api@get');
+    Route::any('/update', 'Api@update');
+    Route::any('/submit', 'Api@submit');
+    Route::any('/reject', 'Api@reject');
+    Route::any('/approve', 'Api@approve');
+    Route::any('/pass', 'Api@pass');
+    Route::any('/refuse', 'Api@refuse');
+    Route::any('/review', 'Api@review');
 });
