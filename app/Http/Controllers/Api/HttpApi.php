@@ -314,7 +314,7 @@ class HttpApi {
      */
     public function createLog($query) {
         $options = [
-            'host' => 'http://test.ios.api.train.lesaisport.com',
+            'host' => 'http://test.api.base.caixinunion.com',
             'path' => '/info/log/add',
             'query' => $query
 //            [
@@ -323,7 +323,8 @@ class HttpApi {
 //                'before_value'=>,
 //                'after_value'=>,
 //                'remark'=>,(非必填
-//                'uid'=>
+//                'uid'=>,
+//                'pri_key'=>
 //            ]
         ];
         $result = Curl::getMethod($options);
