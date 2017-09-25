@@ -21,7 +21,7 @@ class Api extends HttpApi {
         $this->application = $this->application();
     }
     /**
-     * 2003 提交审批
+     * 数组判空
      *
      * @access public
      * @return void
@@ -41,7 +41,6 @@ class Api extends HttpApi {
      * @return void
      */
     public function get() {
-//        dd($this->data['uid']);
         $ope_time=date('Y-m-d H:i:s',time());
         if (!is_array($this->application)){
             return $this->application;
@@ -49,44 +48,65 @@ class Api extends HttpApi {
         $application_control=$this->application['data']['application_control'];
         switch ($application_control['state']){
             case 1:
-                ApplicationControl::find($this->data['application_control_id'])->update([
+                $appUpdate=$this->applicationUpdate([
+                    'application_control_id'=>$this->data['application_control_id'],
                     'state'=>2
                 ]);
-                Log::create([
+                if (!is_array($appUpdate)){
+                    return $appUpdate;
+                }
+                $logCreate=$this->createLog([
                     'table_name'=>'application_control',
                     'change_field'=>'state',
                     'before_value'=>1,
                     'after_value'=>2,
-                    'create_time'=>$ope_time,
                     'uid'=>$this->data['uid']
                 ]);
-                ApplicationShenhe::create([
+                if (!is_array($logCreate)){
+                    return $logCreate;
+                }
+                $checkCreate=$this->checkInsert([
                     'application_control_id'=>$this->data['application_control_id'],
                     'store_id'=>$application_control['store_id']
                 ]);
-                ApplicationShenheOpera::create([
+                if (!is_array($checkCreate)){
+                    return $checkCreate;
+                }
+                $checkOperaCreate=$this->checkOperaInsert([
                     'shenhe_start'=>$ope_time,
                     'application_control_id'=>$this->data['application_control_id'],
                     'shenhe_uid'=>$this->data['uid']
                 ]);
+                if (!is_array($checkOperaCreate)){
+                    return $checkOperaCreate;
+                }
                 break;
             case 17:
-                ApplicationControl::find($this->data['application_control_id'])->update([
+                $appUpdate=$this->applicationUpdate([
+                    'application_control_id'=>$this->data['application_control_id'],
                     'state'=>10
                 ]);
-                Log::create([
+                if (!is_array($appUpdate)){
+                    return $appUpdate;
+                }
+                $logCreate=$this->createLog([
                     'table_name'=>'application_control',
                     'change_field'=>'state',
                     'before_value'=>17,
                     'after_value'=>10,
-                    'create_time'=>$ope_time,
                     'uid'=>$this->data['uid']
                 ]);
-                ApplicationShenheOpera::create([
+                if (!is_array($logCreate)){
+                    return $logCreate;
+                }
+                $checkOperaCreate=$this->checkOperaInsert([
                     'shenhe_start'=>$ope_time,
                     'application_control_id'=>$this->data['application_control_id'],
                     'shenhe_uid'=>$this->data['uid']
                 ]);
+                if (!is_array($checkOperaCreate)){
+                    return $checkOperaCreate;
+                }
                 break;
             case 2:
                 break;

@@ -62,8 +62,10 @@ class CURL {
         if (!empty($query)) {
             $url .= "?";
             if (is_array($query)) {
+                $flag = 1;
                 foreach ($query as $key => $value) {
-                    $url .= '&'.$key.'='.$value;
+                    $url .= $flag == 1 ? $key.'='.$value : '&'.$key.'='.$value;
+                    $flag += 1;
                 }
             } else {
                 $url .= $query;

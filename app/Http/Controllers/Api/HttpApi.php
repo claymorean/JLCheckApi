@@ -68,7 +68,7 @@ class HttpApi {
         }
         $options = [
             'host' => 'http://test.api.base-y.caixinunion.com',
-            'path' => '/applicationcontrol/detail/',
+            'path' => '/applicationcontrol/detail',
             'query' => ['application_control_id' => $this->data[ 'application_control_id' ]]
         ];
         $result = Curl::getMethod($options);
@@ -81,23 +81,94 @@ class HttpApi {
         }
     }
     /**
-     * 调用application_shenhe接口
+     * 调用application_control更新接口
      *
      * @access public
      * @param array $data
      * @return void
      */
-    public function check() {
+    public function applicationUpdate($query) {
+        if(empty($this->data)){
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, 'application_control_id有误', []);
+        }
         $options = [
             'host' => 'http://test.api.base-y.caixinunion.com',
-            'path' => '/applicationcontrol/detail/',
-            'query' => ['application_control_id' => $this->data[ 'application_control_id' ]]
+            'path' => '/applicationcontrol/edit',
+            'query' => $query
         ];
         $result = Curl::getMethod($options);
         if ($result[ 'code' ] != 200 || empty($result)) {
             $endTime = $this->getCurrentTime();
             $spend_time = round(($endTime - $this->startTime),13);
             return $this->response($spend_time, 400, 'application_control_id有误', []);
+        }else{
+            return $result;
+        }
+    }
+    /**
+ * 调用application_shenhe接口
+ *
+ * @access public
+ * @param array $data
+ * @return void
+ */
+    public function check($application_shenhe_id) {
+        $options = [
+            'host' => 'http://test.api.base-y.caixinunion.com',
+            'path' => '/applicationshenhe/detail',
+            'query' => ['application_shenhe_id' => $application_shenhe_id]
+        ];
+        $result = Curl::getMethod($options);
+        if ($result[ 'code' ] != 200 || empty($result)) {
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, 'application_shenhe_id有误', []);
+        }else{
+            return $result;
+        }
+    }
+    /**
+     * 调用application_shenhe新增接口
+     *
+     * @access public
+     * @param array $data
+     * @return void
+     */
+    public function checkInsert($query) {
+        $options = [
+            'host' => 'http://test.api.base-y.caixinunion.com',
+            'path' => '/applicationshenhe/add',
+            'query' => $query
+        ];
+        $result = Curl::getMethod($options);
+        if ($result[ 'code' ] != 200 || empty($result)) {
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, 'application_shenhe_id有误', []);
+        }else{
+            return $result;
+        }
+    }
+    /**
+     * 调用application_shenhe更新接口
+     *
+     * @access public
+     * @param array $data
+     * @return void
+     */
+    public function checkUpdate($query) {
+        $options = [
+            'host' => 'http://test.api.base-y.caixinunion.com',
+            'path' => '/applicationshenhe/edit',
+            'query' => $query
+        ];
+        $result = Curl::getMethod($options);
+        if ($result[ 'code' ] != 200 || empty($result)) {
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, 'application_shenhe_id有误', []);
         }else{
             return $result;
         }
@@ -109,17 +180,61 @@ class HttpApi {
      * @param array $data
      * @return void
      */
-    public function checkOpera() {
+    public function checkOpera($application_shenhe_opera_id) {
         $options = [
             'host' => 'http://test.api.base-y.caixinunion.com',
-            'path' => '',
-            'query' => ['application_control_id' => $this->data[ 'application_control_id' ]]
+            'path' => '/applicationshenheopera/detail',
+            'query' => ['application_shenhe_opera_id' => $application_shenhe_opera_id]
         ];
         $result = Curl::getMethod($options);
         if ($result[ 'code' ] != 200 || empty($result)) {
             $endTime = $this->getCurrentTime();
             $spend_time = round(($endTime - $this->startTime),13);
-            return $this->response($spend_time, 400, 'application_control_id有误', []);
+            return $this->response($spend_time, 400, 'application_shenhe_opera_id有误', []);
+        }else{
+            return $result;
+        }
+    }
+    /**
+     * 调用application_shenhe_opera新增接口
+     *
+     * @access public
+     * @param array $data
+     * @return void
+     */
+    public function checkOperaInsert($query) {
+        $options = [
+            'host' => 'http://test.api.base-y.caixinunion.com',
+            'path' => '/applicationshenheopera/add',
+            'query' => $query
+        ];
+        $result = Curl::getMethod($options);
+        if ($result[ 'code' ] != 200 || empty($result)) {
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, 'application_shenhe_opera_id有误', []);
+        }else{
+            return $result;
+        }
+    }
+    /**
+     * 调用application_shenhe_opera详情更新接口
+     *
+     * @access public
+     * @param array $data
+     * @return void
+     */
+    public function checkOperaUpdate($query) {
+        $options = [
+            'host' => 'http://test.api.base-y.caixinunion.com',
+            'path' => '/applicationshenheopera/edit',
+            'query' => $query
+        ];
+        $result = Curl::getMethod($options);
+        if ($result[ 'code' ] != 200 || empty($result)) {
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, 'application_shenhe_opera_id有误', []);
         }else{
             return $result;
         }
@@ -131,17 +246,91 @@ class HttpApi {
      * @param array $data
      * @return void
      */
-    public function approveOpera() {
+    public function approveOpera($application_shenpi_opera_id) {
         $options = [
-            'host' => 'http://test.api.base-y.caixinunion.com',
-            'path' => '',
-            'query' => ['application_control_id' => $this->data[ 'application_control_id' ]]
+            'host' => 'http://test.ios.api.train.lesaisport.com',
+            'path' => '/applicaitonshenpiopera/detail',
+            'query' => ['application_shenpi_opera_id' => $application_shenpi_opera_id]
         ];
         $result = Curl::getMethod($options);
         if ($result[ 'code' ] != 200 || empty($result)) {
             $endTime = $this->getCurrentTime();
             $spend_time = round(($endTime - $this->startTime),13);
-            return $this->response($spend_time, 400, 'application_control_id有误', []);
+            return $this->response($spend_time, 400, 'application_shenpi_opera_id有误', []);
+        }else{
+            return $result;
+        }
+    }
+    /**
+     * 调用application_shenpi新增接口
+     *
+     * @access public
+     * @param array $data
+     * @return void
+     */
+    public function approveOperaInsert($query) {
+        $options = [
+            'host' => 'http://test.api.base-y.caixinunion.com',
+            'path' => '/applicationshenpiopera/add',
+            'query' => $query
+        ];
+        $result = Curl::getMethod($options);
+        if ($result[ 'code' ] != 200 || empty($result)) {
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, 'application_shenpi_opera_id有误', []);
+        }else{
+            return $result;
+        }
+    }
+    /**
+     * 调用application_shenpi_opera更新接口
+     *
+     * @access public
+     * @param array $data
+     * @return void
+     */
+    public function approveOperaUpdate($query) {
+        $options = [
+            'host' => 'http://test.ios.api.train.lesaisport.com',
+            'path' => '/applicationshenpiopera/edit',
+            'query' => $query
+        ];
+        $result = Curl::getMethod($options);
+        if ($result[ 'code' ] != 200 || empty($result)) {
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, 'application_shenpi_opera_id有误', []);
+        }else{
+            return $result;
+        }
+    }
+    /**
+     * 调用新增info_log接口
+     *
+     * @access public
+     * @param array $data
+     * @return void
+     */
+    public function createLog($query) {
+        $options = [
+            'host' => 'http://test.ios.api.train.lesaisport.com',
+            'path' => '/info/log/add',
+            'query' => $query
+//            [
+//                'table_name'=>,
+//                'change_field'=>,
+//                'before_value'=>,
+//                'after_value'=>,
+//                'remark'=>,(非必填
+//                'uid'=>
+//            ]
+        ];
+        $result = Curl::getMethod($options);
+        if ($result[ 'code' ] != 200 || empty($result)) {
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, '创建日志失败', []);
         }else{
             return $result;
         }
