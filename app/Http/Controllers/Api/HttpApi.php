@@ -146,7 +146,7 @@ class HttpApi {
         if ($result[ 'code' ] != 200 || empty($result)) {
             $endTime = $this->getCurrentTime();
             $spend_time = round(($endTime - $this->startTime),13);
-            return $this->response($spend_time, 400, 'application_shenhe_id有误', []);
+            return $this->response($spend_time, 400, 'application_shenhe新增失败', []);
         }else{
             return $result;
         }
@@ -212,7 +212,7 @@ class HttpApi {
         if ($result[ 'code' ] != 200 || empty($result)) {
             $endTime = $this->getCurrentTime();
             $spend_time = round(($endTime - $this->startTime),13);
-            return $this->response($spend_time, 400, 'application_shenhe_opera_id有误', []);
+            return $this->response($spend_time, 400, 'application_shenhe_opera新增失败', []);
         }else{
             return $result;
         }
@@ -278,7 +278,7 @@ class HttpApi {
         if ($result[ 'code' ] != 200 || empty($result)) {
             $endTime = $this->getCurrentTime();
             $spend_time = round(($endTime - $this->startTime),13);
-            return $this->response($spend_time, 400, 'application_shenpi_opera_id有误', []);
+            return $this->response($spend_time, 400, 'application_shenpi_opera新增失败', []);
         }else{
             return $result;
         }

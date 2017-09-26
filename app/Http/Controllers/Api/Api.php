@@ -300,9 +300,16 @@ class Api extends HttpApi {
      * @return void
      */
     public function reject() {
-        $ope_time=date('Y-m-d H:i:s',time());
         if (!is_array($this->application)){
             return $this->application;
+        }
+        $check=$this->check($this->data['application_shenhe_id']);
+        if (!is_array($check)){
+            return $check;
+        }
+        $checkOpera=$this->checkOpera($this->data['application_shenhe_opera_id']);
+        if (!is_array($checkOpera)){
+            return $checkOpera;
         }
         if($this->is_array_empty(array_only($this->data,['shenhe_sug','shenhe_end_reason','shenhe_end_remark']))){
             $endTime = $this->getCurrentTime();
@@ -313,30 +320,44 @@ class Api extends HttpApi {
         $application_control=$this->application['data']['application_control'];
         switch ($application_control['state']){
             case 2:
-                ApplicationControl::find($this->data['application_control_id'])->update([
+                $appUpdate=$this->applicationUpdate([
+                    'application_control_id'=>$this->data['application_control_id'],
                     'state'=>8
                 ]);
-                Log::create([
+                if (!is_array($appUpdate)){
+                    return $appUpdate;
+                }
+                $logCreate=$this->createLog([
                     'table_name'=>'application_control',
                     'change_field'=>'state',
                     'before_value'=>2,
                     'after_value'=>8,
-                    'create_time'=>$ope_time,
-                    'uid'=>$this->data['uid']
+                    'uid'=>$this->data['uid'],
+                    'pri_key'=>'application_control_id'
                 ]);
+                if (!is_array($logCreate)){
+                    return $logCreate;
+                }
                 break;
             case 10:
-                ApplicationControl::find($this->data['application_control_id'])->update([
+                $appUpdate=$this->applicationUpdate([
+                    'application_control_id'=>$this->data['application_control_id'],
                     'state'=>8
                 ]);
-                Log::create([
+                if (!is_array($appUpdate)){
+                    return $appUpdate;
+                }
+                $logCreate=$this->createLog([
                     'table_name'=>'application_control',
                     'change_field'=>'state',
                     'before_value'=>10,
                     'after_value'=>8,
-                    'create_time'=>$ope_time,
-                    'uid'=>$this->data['uid']
+                    'uid'=>$this->data['uid'],
+                    'pri_key'=>'application_control_id'
                 ]);
+                if (!is_array($logCreate)){
+                    return $logCreate;
+                }
                 break;
             default:
                 $endTime = $this->getCurrentTime();
@@ -346,25 +367,45 @@ class Api extends HttpApi {
                 break;
         }
         $end_time=date('Y-m-d H:i:s',time());
-        Log::create([
-            'table_name'=>'application_control',
-            'change_field'=>'shenhe_sub_time',
-            'before_value'=>ApplicationControl::find($this->data['application_control_id'])->shenhe_sub_time,
-            'after_value'=>$end_time,
-            'create_time'=>$end_time,
-            'uid'=>$this->data['uid']
-        ]);
-        $bool_control=ApplicationControl::find($this->data['application_control_id'])->update([
+        $appUpdate=$this->applicationUpdate([
+            'application_control_id'=>$this->data['application_control_id'],
             'end_time'=>$end_time
         ]);
-        $bool_shenhe_opera=ApplicationShenheOpera::find($this->data['application_shenhe_opera_id'])
-            ->update(array_except($this->data,['application_control_id','uid','application_shenhe_opera_id']));
+        if (!is_array($appUpdate)){
+            return $appUpdate;
+        }
+        $logCreate=$this->createLog([
+            'table_name'=>'application_control',
+            'change_field'=>'end_time',
+            'before_value'=>$application_control['end_time'],
+            'after_value'=>$end_time,
+            'uid'=>$this->data['uid'],
+            'pri_key'=>'application_control_id'
+        ]);
+        if (!is_array($logCreate)){
+            return $logCreate;
+        }
+        $array_checkOpera=array_except($this->data,['application_control_id','uid']);
+        $checkOpera=$this->checkOperaUpdate($array_checkOpera);
+        if (!is_array($checkOpera)){
+            return $checkOpera;
+        }
+        foreach ($array_checkOpera as $key=>$array){
+            $logCreate=$this->createLog([
+                'table_name'=>'application_shenhe_opera',
+                'change_field'=>$key,
+                'before_value'=>$checkOpera['data']['application_shenhe_opera'][$key],
+                'after_value'=>$array,
+                'uid'=>$this->data['uid'],
+                'pri_key'=>'application_shenhe_opera_id'
+            ]);
+            if (!is_array($logCreate)){
+                return $logCreate;
+            }
+        }
         $endTime = $this->getCurrentTime();
         $spend_time = $endTime-$this->startTime;
         $spend_time = round($spend_time,13);//小数点位数13
-        if(!($bool_control || $bool_shenhe_opera)){
-            return $this->response($spend_time,400, '更新操作失败', []);
-        }
         return $this->response($spend_time,200, '操作成功', array_only($this->data,['application_control_id','application_shenhe_id','application_shenhe_opera_id']));
     }
     /**
@@ -381,40 +422,60 @@ class Api extends HttpApi {
         $application_control=$this->application['data']['application_control'];
         switch ($application_control['state']){
             case 4:
-                ApplicationControl::find($this->data['application_control_id'])->update([
+                $appUpdate=$this->applicationUpdate([
+                    'application_control_id'=>$this->data['application_control_id'],
                     'state'=>5
                 ]);
-                Log::create([
+                if (!is_array($appUpdate)){
+                    return $appUpdate;
+                }
+                $logCreate=$this->createLog([
                     'table_name'=>'application_control',
                     'change_field'=>'state',
                     'before_value'=>4,
                     'after_value'=>5,
-                    'create_time'=>$ope_time,
-                    'uid'=>$this->data['uid']
+                    'uid'=>$this->data['uid'],
+                    'pri_key'=>'application_control_id'
                 ]);
-                ApplicationShenpiOpera::create([
+                if (!is_array($logCreate)){
+                    return $logCreate;
+                }
+                $approveOpera=$this->approveOperaInsert([
                     'shenpi_start'=>$ope_time,
                     'application_control_id'=>$this->data['application_control_id'],
                     'shenpi_uid'=>$this->data['uid']
                 ]);
+                if (!is_array($approveOpera)){
+                    return $approveOpera;
+                }
                 break;
             case 19:
-                ApplicationControl::find($this->data['application_control_id'])->update([
+                $appUpdate=$this->applicationUpdate([
+                    'application_control_id'=>$this->data['application_control_id'],
                     'state'=>20
                 ]);
-                Log::create([
+                if (!is_array($appUpdate)){
+                    return $appUpdate;
+                }
+                $logCreate=$this->createLog([
                     'table_name'=>'application_control',
                     'change_field'=>'state',
                     'before_value'=>19,
                     'after_value'=>20,
-                    'create_time'=>$ope_time,
-                    'uid'=>$this->data['uid']
+                    'uid'=>$this->data['uid'],
+                    'pri_key'=>'application_control_id'
                 ]);
-                ApplicationShenpiOpera::create([
+                if (!is_array($logCreate)){
+                    return $logCreate;
+                }
+                $approveOpera=$this->approveOperaInsert([
                     'shenpi_start'=>$ope_time,
                     'application_control_id'=>$this->data['application_control_id'],
                     'shenpi_uid'=>$this->data['uid']
                 ]);
+                if (!is_array($approveOpera)){
+                    return $approveOpera;
+                }
                 break;
             case 5:
                 break;
@@ -439,43 +500,61 @@ class Api extends HttpApi {
      * @return void
      */
     public function pass() {
-        $ope_time=date('Y-m-d H:i:s',time());
         if (!is_array($this->application)){
             return $this->application;
         }
+        $approveOpera=$this->approveOpera($this->data['application_shenpi_opera_id']);
+        if (!is_array($approveOpera)){
+            return $approveOpera;
+        }
         $application_control=$this->application['data']['application_control'];
-        if($this->is_array_empty(array_only($this->data,['shenpi_sug','car_effect','carcondition','risk','shenpi_pass_remark']))){
+        $update_data=array_only($this->data,['shenpi_sug','car_effect','car_condition','risk','shenpi_pass_remark']);
+        if($this->is_array_empty($update_data)){
             $endTime = $this->getCurrentTime();
             $spend_time = $endTime-$this->startTime;
             $spend_time = round($spend_time,13);//小数点位数13
-            return $this->response($spend_time,400, '填写信息不全', ['state'=>$application_control['state']]);
+            return $this->response($spend_time,400, '填写信息不全', []);
         }
         switch ($application_control['state']){
             case 5:
-                ApplicationControl::find($this->data['application_control_id'])->update([
+                $appUpdate=$this->applicationUpdate([
+                    'application_control_id'=>$this->data['application_control_id'],
                     'state'=>6
                 ]);
-                Log::create([
+                if (!is_array($appUpdate)){
+                    return $appUpdate;
+                }
+                $logCreate=$this->createLog([
                     'table_name'=>'application_control',
                     'change_field'=>'state',
                     'before_value'=>5,
                     'after_value'=>6,
-                    'create_time'=>$ope_time,
-                    'uid'=>$this->data['uid']
+                    'uid'=>$this->data['uid'],
+                    'pri_key'=>'application_control_id'
                 ]);
+                if (!is_array($logCreate)){
+                    return $logCreate;
+                }
                 break;
             case 20:
-                ApplicationControl::find($this->data['application_control_id'])->update([
+                $appUpdate=$this->applicationUpdate([
+                    'application_control_id'=>$this->data['application_control_id'],
                     'state'=>6
                 ]);
-                Log::create([
+                if (!is_array($appUpdate)){
+                    return $appUpdate;
+                }
+                $logCreate=$this->createLog([
                     'table_name'=>'application_control',
                     'change_field'=>'state',
                     'before_value'=>20,
                     'after_value'=>6,
-                    'create_time'=>$ope_time,
-                    'uid'=>$this->data['uid']
+                    'uid'=>$this->data['uid'],
+                    'pri_key'=>'application_control_id'
                 ]);
+                if (!is_array($logCreate)){
+                    return $logCreate;
+                }
                 break;
             default:
                 $endTime = $this->getCurrentTime();
@@ -484,9 +563,52 @@ class Api extends HttpApi {
                 return $this->response($spend_time,400, '当前状态有误', ['state'=>$application_control['state']]);
         }
         $update_time=date('Y-m-d H:i:s',time());
-        ApplicationControl::find($this->data['application_control_id'])->update([
+        $appUpdate=$this->applicationUpdate([
+            'application_control_id'=>$this->data['application_control_id'],
             'shepi_sub_time'=>$update_time
         ]);
+        if (!is_array($appUpdate)){
+            return $appUpdate;
+        }
+        $logCreate=$this->createLog([
+            'table_name'=>'application_control',
+            'change_field'=>'shepi_sub_time',
+            'before_value'=>$application_control['shepi_sub_time'],
+            'after_value'=>$update_time,
+            'uid'=>$this->data['uid'],
+            'pri_key'=>'application_control_id'
+        ]);
+        if (!is_array($logCreate)){
+            return $logCreate;
+        }
+        $appUpdate=$this->applicationUpdate(array_merge($update_data,['application_control_id'=>$this->data['application_control_id']]));
+        if (!is_array($appUpdate)){
+            return $appUpdate;
+        }
+        foreach ($update_data as $key=>$data){
+            $logCreate=$this->createLog([
+                'table_name'=>'application_control',
+                'change_field'=>$key,
+                'before_value'=>$application_control[$key],
+                'after_value'=>$data,
+                'uid'=>$this->data['uid'],
+                'pri_key'=>'application_control_id'
+            ]);
+            if (!is_array($logCreate)){
+                return $logCreate;
+            }
+        }
+        $approveUpdate=$this->approveOperaUpdate(array_merge($update_data,[
+            'application_shenpi_opera_id'=>$this->data['application_shenpi_opera_id'],
+            'shepi_sub_time'=>$update_time
+        ]));
+        if (!is_array($approveUpdate)){
+            return $approveUpdate;
+        }
+        $endTime = $this->getCurrentTime();
+        $spend_time = $endTime-$this->startTime;
+        $spend_time = round($spend_time,13);//小数点位数13
+        return $this->response($spend_time,200, '操作成功', array_only($this->data,['application_control_id','application_shenpi_opera_id']));
     }
     /**
      * 2007 审批拒绝
@@ -495,10 +617,82 @@ class Api extends HttpApi {
      * @return void
      */
     public function refuse() {
-        $ope_time=date('Y-m-d H:i:s',time());
         if (!is_array($this->application)){
             return $this->application;
         }
+        $approveOpera=$this->approveOpera($this->data['application_shenpi_opera_id']);
+        if (!is_array($approveOpera)){
+            return $approveOpera;
+        }
+        $update_data=array_only($this->data,['shenpi_sug','shenpi_end_reason','shenpi_end_remark']);
+        if($this->is_array_empty($update_data)){
+            $endTime = $this->getCurrentTime();
+            $spend_time = $endTime-$this->startTime;
+            $spend_time = round($spend_time,13);//小数点位数13
+            return $this->response($spend_time,400, '填写信息不全', []);
+        }
+        $ope_time=date('Y-m-d H:i:s',time());
+        $update_data['shepi_sub_time']=$ope_time;
+        $application_control=$this->application['data']['application_control'];
+        switch ($application_control['state']){
+            case 5:
+                $appUpdate=$this->applicationUpdate([
+                    'application_control_id'=>$this->data['application_control_id'],
+                    'state'=>9
+                ]);
+                if (!is_array($appUpdate)){
+                    return $appUpdate;
+                }
+                $logCreate=$this->createLog([
+                    'table_name'=>'application_control',
+                    'change_field'=>'state',
+                    'before_value'=>5,
+                    'after_value'=>9,
+                    'uid'=>$this->data['uid'],
+                    'pri_key'=>'application_control_id'
+                ]);
+                if (!is_array($logCreate)){
+                    return $logCreate;
+                }
+                break;
+            case 20:
+                $appUpdate=$this->applicationUpdate([
+                    'application_control_id'=>$this->data['application_control_id'],
+                    'state'=>9
+                ]);
+                if (!is_array($appUpdate)){
+                    return $appUpdate;
+                }
+                $logCreate=$this->createLog([
+                    'table_name'=>'application_control',
+                    'change_field'=>'state',
+                    'before_value'=>20,
+                    'after_value'=>9,
+                    'uid'=>$this->data['uid'],
+                    'pri_key'=>'application_control_id'
+                ]);
+                if (!is_array($logCreate)){
+                    return $logCreate;
+                }
+                break;
+            default:
+                $endTime = $this->getCurrentTime();
+                $spend_time = $endTime-$this->startTime;
+                $spend_time = round($spend_time,13);//小数点位数13
+                return $this->response($spend_time,400, '当前状态有误', ['state'=>$application_control['state']]);
+        }
+        $appUpdate=$this->applicationUpdate(array_merge($update_data,['application_control_id'=>$this->data['application_control_id']]));
+        if (!is_array($appUpdate)){
+            return $appUpdate;
+        }
+        $approveUpdate=$this->approveOperaUpdate(array_merge($update_data,['application_shenpi_opera_id'=>$this->data['application_shenpi_opera_id']]));
+        if (!is_array($approveUpdate)){
+            return $approveUpdate;
+        }
+        $endTime = $this->getCurrentTime();
+        $spend_time = $endTime-$this->startTime;
+        $spend_time = round($spend_time,13);//小数点位数13
+        return $this->response($spend_time,200, '操作成功', array_only($this->data,['application_control_id','application_shenpi_opera_id']));
     }
     /**
      * 2008 审批退回审核
@@ -507,9 +701,81 @@ class Api extends HttpApi {
      * @return void
      */
     public function review() {
-        $ope_time=date('Y-m-d H:i:s',time());
         if (!is_array($this->application)){
             return $this->application;
         }
+        $approveOpera=$this->approveOpera($this->data['application_shenpi_opera_id']);
+        if (!is_array($approveOpera)){
+            return $approveOpera;
+        }
+        $update_data=array_only($this->data,['shenpi_sug','shenpi_return_reason','shenpi_return_remark']);
+        if($this->is_array_empty($update_data)){
+            $endTime = $this->getCurrentTime();
+            $spend_time = $endTime-$this->startTime;
+            $spend_time = round($spend_time,13);//小数点位数13
+            return $this->response($spend_time,400, '填写信息不全', []);
+        }
+        $ope_time=date('Y-m-d H:i:s',time());
+        $update_data['shepi_sub_time']=$ope_time;
+        $application_control=$this->application['data']['application_control'];
+        switch ($application_control['state']){
+            case 5:
+                $appUpdate=$this->applicationUpdate([
+                    'application_control_id'=>$this->data['application_control_id'],
+                    'state'=>17
+                ]);
+                if (!is_array($appUpdate)){
+                    return $appUpdate;
+                }
+                $logCreate=$this->createLog([
+                    'table_name'=>'application_control',
+                    'change_field'=>'state',
+                    'before_value'=>5,
+                    'after_value'=>17,
+                    'uid'=>$this->data['uid'],
+                    'pri_key'=>'application_control_id'
+                ]);
+                if (!is_array($logCreate)){
+                    return $logCreate;
+                }
+                break;
+            case 20:
+                $appUpdate=$this->applicationUpdate([
+                    'application_control_id'=>$this->data['application_control_id'],
+                    'state'=>17
+                ]);
+                if (!is_array($appUpdate)){
+                    return $appUpdate;
+                }
+                $logCreate=$this->createLog([
+                    'table_name'=>'application_control',
+                    'change_field'=>'state',
+                    'before_value'=>20,
+                    'after_value'=>17,
+                    'uid'=>$this->data['uid'],
+                    'pri_key'=>'application_control_id'
+                ]);
+                if (!is_array($logCreate)){
+                    return $logCreate;
+                }
+                break;
+            default:
+                $endTime = $this->getCurrentTime();
+                $spend_time = $endTime-$this->startTime;
+                $spend_time = round($spend_time,13);//小数点位数13
+                return $this->response($spend_time,400, '当前状态有误', ['state'=>$application_control['state']]);
+        }
+        $appUpdate=$this->applicationUpdate(array_merge($update_data,['application_control_id'=>$this->data['application_control_id']]));
+        if (!is_array($appUpdate)){
+            return $appUpdate;
+        }
+        $approveUpdate=$this->approveOperaUpdate(array_merge($update_data,['application_shenpi_opera_id'=>$this->data['application_shenpi_opera_id']]));
+        if (!is_array($approveUpdate)){
+            return $approveUpdate;
+        }
+        $endTime = $this->getCurrentTime();
+        $spend_time = $endTime-$this->startTime;
+        $spend_time = round($spend_time,13);//小数点位数13
+        return $this->response($spend_time,200, '操作成功', array_only($this->data,['application_control_id','application_shenpi_opera_id']));
     }
 }
