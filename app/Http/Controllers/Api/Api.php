@@ -61,7 +61,7 @@ class Api extends HttpApi {
                     'before_value'=>1,
                     'after_value'=>2,
                     'uid'=>$this->data['uid'],
-                    'pri_key'=>'application_control_id'
+                    'pri_key'=>$this->data['application_control_id']
                 ]);
                 if (!is_array($logCreate)){
                     return $logCreate;
@@ -96,7 +96,7 @@ class Api extends HttpApi {
                     'before_value'=>17,
                     'after_value'=>10,
                     'uid'=>$this->data['uid'],
-                    'pri_key'=>'application_control_id'
+                    'pri_key'=>$this->data['application_control_id']
                 ]);
                 if (!is_array($logCreate)){
                     return $logCreate;
@@ -160,7 +160,7 @@ class Api extends HttpApi {
         $application_shenhe=array_except($this->data,['uid','application_control_id','application_shenhe_opera_id','shenhe_sug','sub_shenpi_remark','shenhe_end_reason','shenhe_end_remark','return_file','shenhe_return_reason','shenhe_return_remark']);
         $bool_shenhe=$this->checkUpdate($application_shenhe);
         $application_shenhe_opera=array_only($this->data,['application_shenhe_opera_id','shenhe_sug','sub_shenpi_remark','shenhe_end_reason','shenhe_end_remark','return_file','shenhe_return_reason','shenhe_return_remark']);
-        $bool_shenhe_opera=$this->checkUpdate($application_shenhe_opera);
+        $bool_shenhe_opera=$this->checkOperaUpdate($application_shenhe_opera);
 
         $endTime = $this->getCurrentTime();
         $spend_time = $endTime-$this->startTime;
@@ -218,7 +218,7 @@ class Api extends HttpApi {
                     'before_value'=>2,
                     'after_value'=>4,
                     'uid'=>$this->data['uid'],
-                    'pri_key'=>'application_control_id'
+                    'pri_key'=>$this->data['application_control_id']
                 ]);
                 if (!is_array($logCreate)){
                     return $logCreate;
@@ -238,7 +238,7 @@ class Api extends HttpApi {
                     'before_value'=>10,
                     'after_value'=>19,
                     'uid'=>$this->data['uid'],
-                    'pri_key'=>'application_control_id'
+                    'pri_key'=>$this->data['application_control_id']
                 ]);
                 if (!is_array($logCreate)){
                     return $logCreate;
@@ -265,7 +265,7 @@ class Api extends HttpApi {
             'before_value'=>$application_control['shenhe_sub_time'],
             'after_value'=>$update_time,
             'uid'=>$this->data['uid'],
-            'pri_key'=>'application_control_id'
+            'pri_key'=>$this->data['application_control_id']
         ]);
         if (!is_array($logCreate)){
             return $logCreate;
@@ -283,7 +283,7 @@ class Api extends HttpApi {
             'before_value'=>$checkOpera['data']['application_shenhe_opera']['shenhe_sub_time'],
             'after_value'=>$update_time,
             'uid'=>$this->data['uid'],
-            'pri_key'=>'application_shenhe_opera_id'
+            'pri_key'=>$this->data['application_shenhe_opera_id']
         ]);
         if (!is_array($logCreate)){
             return $logCreate;
@@ -333,7 +333,7 @@ class Api extends HttpApi {
                     'before_value'=>2,
                     'after_value'=>8,
                     'uid'=>$this->data['uid'],
-                    'pri_key'=>'application_control_id'
+                    'pri_key'=>$this->data['application_control_id'],
                 ]);
                 if (!is_array($logCreate)){
                     return $logCreate;
@@ -353,7 +353,7 @@ class Api extends HttpApi {
                     'before_value'=>10,
                     'after_value'=>8,
                     'uid'=>$this->data['uid'],
-                    'pri_key'=>'application_control_id'
+                    'pri_key'=>$this->data['application_control_id'],
                 ]);
                 if (!is_array($logCreate)){
                     return $logCreate;
@@ -380,16 +380,17 @@ class Api extends HttpApi {
             'before_value'=>$application_control['end_time'],
             'after_value'=>$end_time,
             'uid'=>$this->data['uid'],
-            'pri_key'=>'application_control_id'
+            'pri_key'=>$this->data['application_control_id'],
         ]);
         if (!is_array($logCreate)){
             return $logCreate;
         }
-        $array_checkOpera=array_except($this->data,['application_control_id','uid']);
-        $checkOpera=$this->checkOperaUpdate($array_checkOpera);
-        if (!is_array($checkOpera)){
-            return $checkOpera;
+        $array_checkOpera=array_except($this->data,['application_control_id','application_shenhe_id','uid']);
+        $boolCheckOpera=$this->checkOperaUpdate($array_checkOpera);
+        if (!is_array($boolCheckOpera)){
+            return $boolCheckOpera;
         }
+        $array_checkOpera=array_except($array_checkOpera,['application_shenhe_opera_id']);
         foreach ($array_checkOpera as $key=>$array){
             $logCreate=$this->createLog([
                 'table_name'=>'application_shenhe_opera',
@@ -397,7 +398,7 @@ class Api extends HttpApi {
                 'before_value'=>$checkOpera['data']['application_shenhe_opera'][$key],
                 'after_value'=>$array,
                 'uid'=>$this->data['uid'],
-                'pri_key'=>'application_shenhe_opera_id'
+                'pri_key'=>$this->data['application_shenhe_opera_id']
             ]);
             if (!is_array($logCreate)){
                 return $logCreate;
@@ -435,7 +436,7 @@ class Api extends HttpApi {
                     'before_value'=>4,
                     'after_value'=>5,
                     'uid'=>$this->data['uid'],
-                    'pri_key'=>'application_control_id'
+                    'pri_key'=>$this->data['application_control_id']
                 ]);
                 if (!is_array($logCreate)){
                     return $logCreate;
@@ -463,7 +464,7 @@ class Api extends HttpApi {
                     'before_value'=>19,
                     'after_value'=>20,
                     'uid'=>$this->data['uid'],
-                    'pri_key'=>'application_control_id'
+                    'pri_key'=>$this->data['application_control_id']
                 ]);
                 if (!is_array($logCreate)){
                     return $logCreate;
@@ -508,7 +509,8 @@ class Api extends HttpApi {
             return $approveOpera;
         }
         $application_control=$this->application['data']['application_control'];
-        $update_data=array_only($this->data,['shenpi_sug','car_effect','car_condition','risk','shenpi_pass_remark']);
+        $update_data=array_only($this->data,['shenpi_sug','car_condition','risk','shenpi_pass_remark']);
+        $update_data['effect_day']=$this->data['car_effect'];
         if($this->is_array_empty($update_data)){
             $endTime = $this->getCurrentTime();
             $spend_time = $endTime-$this->startTime;
@@ -530,7 +532,7 @@ class Api extends HttpApi {
                     'before_value'=>5,
                     'after_value'=>6,
                     'uid'=>$this->data['uid'],
-                    'pri_key'=>'application_control_id'
+                    'pri_key'=>$this->data['application_control_id']
                 ]);
                 if (!is_array($logCreate)){
                     return $logCreate;
@@ -550,7 +552,7 @@ class Api extends HttpApi {
                     'before_value'=>20,
                     'after_value'=>6,
                     'uid'=>$this->data['uid'],
-                    'pri_key'=>'application_control_id'
+                    'pri_key'=>$this->data['application_control_id']
                 ]);
                 if (!is_array($logCreate)){
                     return $logCreate;
@@ -565,23 +567,25 @@ class Api extends HttpApi {
         $update_time=date('Y-m-d H:i:s',time());
         $appUpdate=$this->applicationUpdate([
             'application_control_id'=>$this->data['application_control_id'],
-            'shepi_sub_time'=>$update_time
+            'shenpi_sub_time'=>$update_time
         ]);
         if (!is_array($appUpdate)){
             return $appUpdate;
         }
         $logCreate=$this->createLog([
             'table_name'=>'application_control',
-            'change_field'=>'shepi_sub_time',
-            'before_value'=>$application_control['shepi_sub_time'],
+            'change_field'=>'shenpi_sub_time',
+            'before_value'=>$application_control['shenpi_sub_time'],
             'after_value'=>$update_time,
             'uid'=>$this->data['uid'],
-            'pri_key'=>'application_control_id'
+            'pri_key'=>$this->data['application_control_id']
         ]);
         if (!is_array($logCreate)){
             return $logCreate;
         }
-        $appUpdate=$this->applicationUpdate(array_merge($update_data,['application_control_id'=>$this->data['application_control_id']]));
+        $app_update_data=$update_data;
+        $app_update_data['application_control_id']=$this->data['application_control_id'];
+        $appUpdate=$this->applicationUpdate($app_update_data);
         if (!is_array($appUpdate)){
             return $appUpdate;
         }
@@ -592,15 +596,15 @@ class Api extends HttpApi {
                 'before_value'=>$application_control[$key],
                 'after_value'=>$data,
                 'uid'=>$this->data['uid'],
-                'pri_key'=>'application_control_id'
+                'pri_key'=>$this->data['application_control_id']
             ]);
             if (!is_array($logCreate)){
                 return $logCreate;
             }
         }
+        $update_data=array_only($this->data,['application_shenpi_opera_id','shenpi_sug','car_effect','car_condition','risk','shenpi_pass_remark']);
         $approveUpdate=$this->approveOperaUpdate(array_merge($update_data,[
-            'application_shenpi_opera_id'=>$this->data['application_shenpi_opera_id'],
-            'shepi_sub_time'=>$update_time
+            'shenpi_sub_time'=>$update_time
         ]));
         if (!is_array($approveUpdate)){
             return $approveUpdate;
@@ -632,7 +636,7 @@ class Api extends HttpApi {
             return $this->response($spend_time,400, '填写信息不全', []);
         }
         $ope_time=date('Y-m-d H:i:s',time());
-        $update_data['shepi_sub_time']=$ope_time;
+        $update_data['shenpi_sub_time']=$ope_time;
         $application_control=$this->application['data']['application_control'];
         switch ($application_control['state']){
             case 5:
@@ -649,7 +653,7 @@ class Api extends HttpApi {
                     'before_value'=>5,
                     'after_value'=>9,
                     'uid'=>$this->data['uid'],
-                    'pri_key'=>'application_control_id'
+                    'pri_key'=>$this->data['application_control_id']
                 ]);
                 if (!is_array($logCreate)){
                     return $logCreate;
@@ -669,7 +673,7 @@ class Api extends HttpApi {
                     'before_value'=>20,
                     'after_value'=>9,
                     'uid'=>$this->data['uid'],
-                    'pri_key'=>'application_control_id'
+                    'pri_key'=>$this->data['application_control_id']
                 ]);
                 if (!is_array($logCreate)){
                     return $logCreate;
@@ -716,7 +720,7 @@ class Api extends HttpApi {
             return $this->response($spend_time,400, '填写信息不全', []);
         }
         $ope_time=date('Y-m-d H:i:s',time());
-        $update_data['shepi_sub_time']=$ope_time;
+        $update_data['shenpi_sub_time']=$ope_time;
         $application_control=$this->application['data']['application_control'];
         switch ($application_control['state']){
             case 5:
@@ -733,7 +737,7 @@ class Api extends HttpApi {
                     'before_value'=>5,
                     'after_value'=>17,
                     'uid'=>$this->data['uid'],
-                    'pri_key'=>'application_control_id'
+                    'pri_key'=>$this->data['application_control_id']
                 ]);
                 if (!is_array($logCreate)){
                     return $logCreate;
@@ -753,7 +757,7 @@ class Api extends HttpApi {
                     'before_value'=>20,
                     'after_value'=>17,
                     'uid'=>$this->data['uid'],
-                    'pri_key'=>'application_control_id'
+                    'pri_key'=>$this->data['application_control_id']
                 ]);
                 if (!is_array($logCreate)){
                     return $logCreate;

@@ -248,8 +248,8 @@ class HttpApi {
      */
     public function approveOpera($application_shenpi_opera_id) {
         $options = [
-            'host' => 'http://test.ios.api.train.lesaisport.com',
-            'path' => '/applicaitonshenpiopera/detail',
+            'host' => 'http://test.api.base-y.caixinunion.com',
+            'path' => '/applicationshenpiopera/detail',
             'query' => ['application_shenpi_opera_id' => $application_shenpi_opera_id]
         ];
         $result = Curl::getMethod($options);
@@ -292,7 +292,7 @@ class HttpApi {
      */
     public function approveOperaUpdate($query) {
         $options = [
-            'host' => 'http://test.ios.api.train.lesaisport.com',
+            'host' => 'http://test.api.base-y.caixinunion.com',
             'path' => '/applicationshenpiopera/edit',
             'query' => $query
         ];
