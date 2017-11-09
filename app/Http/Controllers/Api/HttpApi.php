@@ -64,6 +64,11 @@ class HttpApi {
         if(empty($this->data)){
             $endTime = $this->getCurrentTime();
             $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, '入参不能为空', []);
+        }
+        if(!$this->data[ 'application_control_id' ]){
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
             return $this->response($spend_time, 400, 'application_control_id有误', []);
         }
         $options = [
@@ -115,6 +120,11 @@ class HttpApi {
  * @return void
  */
     public function check($application_shenhe_id) {
+        if (is_null($application_shenhe_id)) {
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, 'application_shenhe_id不能为空', []);
+        }
         $options = [
             'host' => 'http://test.api.base-y.caixinunion.com',
             'path' => '/applicationshenhe/detail',
@@ -181,6 +191,11 @@ class HttpApi {
      * @return void
      */
     public function checkOpera($application_shenhe_opera_id) {
+        if (is_null($application_shenhe_opera_id)) {
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, 'application_shenhe_opera_id不能为空', []);
+        }
         $options = [
             'host' => 'http://test.api.base-y.caixinunion.com',
             'path' => '/applicationshenheopera/detail',
@@ -247,6 +262,11 @@ class HttpApi {
      * @return void
      */
     public function approveOpera($application_shenpi_opera_id) {
+        if (is_null($application_shenpi_opera_id)) {
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, 'application_shenpi_opera_id不能为空', []);
+        }
         $options = [
             'host' => 'http://test.api.base-y.caixinunion.com',
             'path' => '/applicationshenpiopera/detail',
