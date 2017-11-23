@@ -66,7 +66,7 @@ class HttpApi {
             $spend_time = round(($endTime - $this->startTime),13);
             return $this->response($spend_time, 400, '入参不能为空', []);
         }
-        if(!$this->data[ 'application_control_id' ]){
+        if(!isset($this->data[ 'application_control_id' ])){
             $endTime = $this->getCurrentTime();
             $spend_time = round(($endTime - $this->startTime),13);
             return $this->response($spend_time, 400, 'application_control_id有误', []);
@@ -93,7 +93,7 @@ class HttpApi {
      * @return void
      */
     public function applicationUpdate($query) {
-        if(empty($this->data)){
+        if(empty($this->data) || !isset($this->data[ 'application_control_id' ])){
             $endTime = $this->getCurrentTime();
             $spend_time = round(($endTime - $this->startTime),13);
             return $this->response($spend_time, 400, 'application_control_id有误', []);
