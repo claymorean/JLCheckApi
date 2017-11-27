@@ -41,6 +41,11 @@ class Api extends HttpApi {
      * @return void
      */
     public function get() {
+        if(!isset($this->data[ 'application_control_id' ]) || !isset($this->data[ 'uid' ])){
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, '入参有误', []);
+        }
         $ope_time=date('Y-m-d H:i:s',time());
         if (!is_array($this->application)){
             return $this->application;
@@ -133,6 +138,11 @@ class Api extends HttpApi {
      * @return void
      */
     public function update(){
+        if(!isset($this->data[ 'application_control_id' ]) || !isset($this->data[ 'uid' ]) || !isset($this->data[ 'application_shenhe_id' ]) || !isset($this->data[ 'application_shenhe_opera_id' ])){
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, '入参有误', []);
+        }
         if (!is_array($this->application)){
             return $this->application;
         }
@@ -177,6 +187,11 @@ class Api extends HttpApi {
      * @return void
      */
     public function submit() {
+        if(!isset($this->data[ 'application_control_id' ]) || !isset($this->data[ 'uid' ]) || !isset($this->data[ 'application_shenhe_id' ]) || !isset($this->data[ 'application_shenhe_opera_id' ])){
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, '入参有误', []);
+        }
         if (!is_array($this->application)){
             return $this->application;
         }
@@ -300,6 +315,11 @@ class Api extends HttpApi {
      * @return void
      */
     public function reject() {
+        if(!isset($this->data[ 'application_control_id' ]) || !isset($this->data[ 'uid' ]) ||  !isset($this->data[ 'application_shenhe_id' ]) || !isset($this->data[ 'application_shenhe_opera_id' ])){
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, '入参有误', []);
+        }
         if (!is_array($this->application)){
             return $this->application;
         }
@@ -416,6 +436,11 @@ class Api extends HttpApi {
      * @return void
      */
     public function approve() {
+        if(!isset($this->data[ 'application_control_id' ]) || !isset($this->data[ 'uid' ])){
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, '入参有误', []);
+        }
         $ope_time=date('Y-m-d H:i:s',time());
         if (!is_array($this->application)){
             return $this->application;
@@ -501,6 +526,11 @@ class Api extends HttpApi {
      * @return void
      */
     public function pass() {
+        if(!isset($this->data[ 'application_control_id' ]) || !isset($this->data[ 'uid' ]) ||  !isset($this->data[ 'application_shenpi_opera_id' ])){
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, '入参有误', []);
+        }
         if (!is_array($this->application)){
             return $this->application;
         }
@@ -621,6 +651,11 @@ class Api extends HttpApi {
      * @return void
      */
     public function refuse() {
+        if(!isset($this->data[ 'application_control_id' ]) || !isset($this->data[ 'uid' ]) ||  !isset($this->data[ 'application_shenpi_opera_id' ])){
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, '入参有误', []);
+        }
         if (!is_array($this->application)){
             return $this->application;
         }
@@ -705,6 +740,11 @@ class Api extends HttpApi {
      * @return void
      */
     public function review() {
+        if(!isset($this->data[ 'application_control_id' ]) || !isset($this->data[ 'uid' ]) ||  !isset($this->data[ 'application_shenpi_opera_id' ])){
+            $endTime = $this->getCurrentTime();
+            $spend_time = round(($endTime - $this->startTime),13);
+            return $this->response($spend_time, 400, '入参有误', []);
+        }
         if (!is_array($this->application)){
             return $this->application;
         }
